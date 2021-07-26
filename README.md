@@ -1,6 +1,6 @@
 # TAU Engineering Alumni Registering and Sticker Printing System
 https://engineering.tau.ac.il/tauengalumni
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![ארגון בוגרי.ות הנדסה של אוניברסית תל אביב](https://raw.githubusercontent.com/EranPer/tauengalumni/main/TAU_facultot_logos-01-handasa.png)
 
 This is a system I developed for the events of Tel Aviv University's Engineering Alumni.
 
