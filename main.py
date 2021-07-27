@@ -248,7 +248,7 @@ def main():
             try:
                 # Open Camera and start scanning
                 qrcode_info = codes.camera_scan()
-            except ConnectionError:
+            except:
                 sg.popup('Check camera!')
                 continue
 
