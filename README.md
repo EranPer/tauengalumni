@@ -9,3 +9,7 @@ The guests come with tickets containing a QR code to an event. By using a laptop
 [ארגון בוגרי.ות הנדסה של אוניברסית תל אביב](https://engineering.tau.ac.il/tauengalumni)
 
 [TAU Faculty of Engineering (English)](https://en-engineering.tau.ac.il/)
+
+## Usage Guide
+
+1. ![image alt](https://raw.githubusercontent.com/EranPer/tauengalumni/main/TAU_facultot_logos-01-handasa.png "ארגון בוגרי.ות הנדסה של אוניברסית תל אביב")
