@@ -56,6 +56,7 @@ The guests come with tickets containing a QR code to an event. By using a laptop
 
 ### 15. Another option is to scan QR code encoded with the reservation number.
 ![image alt](https://raw.githubusercontent.com/EranPer/tauengalumni/main/usage%20guide/14.5.png)
+
 ![image alt](https://raw.githubusercontent.com/EranPer/tauengalumni/main/usage%20guide/15.png)
 
 ### 16. In this case the QR code belongs to Mike Jones who already signed in.
