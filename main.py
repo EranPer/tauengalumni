@@ -310,7 +310,7 @@ def main():
         attendees_id_set.add(int(registration_id))
 
         # Append the new row (info) to the attendees file
-        with open(file_name + 'attendees.csv', 'a', newline='') as f:
+        with open(file_name + 'attendees.csv', 'a', newline='', encoding='iso-8859-8') as f:
             writer = csv.writer(f)
 
             # write the data
