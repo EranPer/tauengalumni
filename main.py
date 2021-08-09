@@ -95,7 +95,11 @@ def main():
     df_attendees, attendees_id_set = create_or_read_attendees_table(file_name)
 
     # Printer setup
-    labelCom, labelText = printer.setup()
+    try:
+        labelCom, labelText = printer.setup()
+    except:
+        sg.popup('No drivers for DYMO printer were found. Unable to print!')
+        labelCom, labelText = None, None
 
     # The main window setup
     win = window.main(full_file_name, headline_font, font, button_font, registered_number,
@@ -279,10 +283,13 @@ def main():
 
         # Print a sticker for guests
         if event == 'Confirm and Print' or answer == 'Confirm and Print' or answer == 'Print':
-            print('Printing a sticker...')
-            sg.popup_timed('Printing a sticker...', button_type=5)
-            printer.print(labelCom, labelText, name + '\n' + job_title + '\n' + company)
-            print('Done!')
+            if labelCom is None and labelText is None:
+                sg.popup('Unable to print! No DYMO printer drivers were found!')
+            else:
+                print('Printing a sticker...')
+                sg.popup_timed('Printing a sticker...', button_type=5)
+                printer.print(labelCom, labelText, name + '\n' + job_title + '\n' + company)
+                print('Done!')
 
             # Return to the main window without registration (for guests who already signed in)
             if answer == 'Print':
