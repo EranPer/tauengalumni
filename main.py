@@ -95,11 +95,7 @@ def main():
     df_attendees, attendees_id_set = create_or_read_attendees_table(file_name)
 
     # Printer setup
-    try:
-        labelCom, labelText = printer.setup()
-    except:
-        sg.popup('No drivers for DYMO printer were found. Unable to print!')
-        labelCom, labelText = None, None
+    labelCom, labelText = printer.setup()
 
     # The main window setup
     win = window.main(full_file_name, headline_font, font, button_font, registered_number,
