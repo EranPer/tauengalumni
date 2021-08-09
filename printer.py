@@ -12,10 +12,14 @@ def setup(selectPrinter='DYMO LabelWriter 450'):
     window = sg.Window('Setup', layout)
     window.Read(timeout=1000)
 
-    labelCom = Dispatch('Dymo.DymoAddIn')
-    labelText = Dispatch('Dymo.DymoLabels')
-    isOpen = labelCom.Open('sticker.label')
-    labelCom.SelectPrinter(selectPrinter)
+    try:
+        labelCom = Dispatch('Dymo.DymoAddIn')
+        labelText = Dispatch('Dymo.DymoLabels')
+        isOpen = labelCom.Open('sticker.label')
+        labelCom.SelectPrinter(selectPrinter)
+    except:
+        sg.popup('No drivers for DYMO printer were found. Unable to print!')
+        labelCom, labelText = None, None
 
     window.close()
 
