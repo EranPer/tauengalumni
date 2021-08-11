@@ -15,7 +15,7 @@
 			<LinkedObjectName />
 			<Rotation>Rotation0</Rotation>
 			<IsMirrored>False</IsMirrored>
-			<IsVariable>False</IsVariable>
+			<IsVariable>True</IsVariable>
 			<GroupID>-1</GroupID>
 			<IsOutlined>False</IsOutlined>
 			<HorizontalAlignment>Center</HorizontalAlignment>
