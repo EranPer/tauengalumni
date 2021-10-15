@@ -29,7 +29,7 @@ def read_registration_table():
     """
     layout = [[sg.Text('Enter the event registration table:')],
               [sg.Input(sg.user_settings_get_entry('-filename-', ''), key='-IN-'), sg.FileBrowse()],
-              [sg.Text('.xlsx file with the header: id, name, job title, company')],
+              [sg.Text('.xlsx file with the header: Barcode #, First Name, Last Name, Job Title, Company')],
               [sg.B('Continue'), sg.B('Create QR codes'), sg.B('Exit', key='Exit')]]
 
     window = sg.Window("TAU Engineering Alumni Registering and Sticker Printing System", layout)
@@ -49,13 +49,13 @@ def read_registration_table():
             if os.path.exists(full_file_name):
                 df = pd.read_excel(full_file_name)
                 registered_number = len(df)
-                if not {'id', 'name', 'job title', 'company'}.issubset(set(df.columns)):
+                if not {'Barcode #', 'First Name', 'Last Name', 'Job Title', 'Company'}.issubset(set(df.columns)):
                     sg.popup('The following header of the excel file does not contain the following features:',
-                             'id, name, job title and company',
+                             'Barcode #, First Name, Last Name, Job Title and Company',
                              'Please make sure the first row in the table containing these columns titles')
                     continue
-                registered_id_set = set(df['id'])
-                registered_name_set = set(df['name'])
+                registered_id_set = set(df['Barcode #'])
+                registered_name_set = set(df['First Name'] + ' ' + df['Last Name'])
                 # file_path = os.path.dirname(full_file_name) + '/'
                 file_name = os.path.splitext(full_file_name)[0] + ' '
             else:
@@ -69,7 +69,7 @@ def read_registration_table():
                 df = pd.read_excel(full_file_name)
                 registered_number = len(df)
                 try:
-                    registered_id_set = set(df['id'])
+                    registered_id_set = set(df['Barcode #'])
                 except ValueError:
                     sg.popup('The following header of the excel file does not contain the id feature!')
                     continue
@@ -247,8 +247,9 @@ def main(full_file_name, headline_font, font, button_font, registered_number,
     :param counter_id_for_registered_attendees: the number of registered attendees.
     :return: the window.
     """
-    layout_title = [[sg.Image(r'TAU_facultot_logos-01-handasa.png')],
-                    [sg.Text('מערכת רישום והדפסה', justification='center', size=(70, 1), font=headline_font)]]
+    layout_title = [
+                    [sg.Text('מערכת רישום והדפסה לאירועים של ארגון בוגרי.ות הנדסה באוניברסיטת תל אביב',
+                             justification='center', size=(70, 1), font=headline_font)]]
 
     if full_file_name == '':
         sg_text_registered_number = sg.Text('')
@@ -256,9 +257,9 @@ def main(full_file_name, headline_font, font, button_font, registered_number,
         sg_text_registered_number = sg.Text('/   ' + str(registered_number) + '  total number of people who registered',
                                             font=font)
 
-    layout = [[sg.Text('Enter name:', font=font), sg.InputText(key='name', font=font)],
-              [sg.Text('Enter job title:', font=font), sg.InputText(key='job title', font=font)],
-              [sg.Text('Enter company:', font=font), sg.InputText(key='company', font=font)],
+    layout = [[sg.Text('Enter Name:', font=font), sg.InputText(key='name', font=font)],
+              [sg.Text('Enter Job Title:', font=font), sg.InputText(key='job title', font=font)],
+              [sg.Text('Enter Company:', font=font), sg.InputText(key='company', font=font)],
               [sg.Button('Confirm and Print', font=button_font), sg.Button('Confirm only', font=button_font),
                sg.Button('Search', font=button_font)],
               [sg.Text('Number of non registered attendees:', font=font),

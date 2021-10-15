@@ -32,8 +32,9 @@ def create_or_read_attendees_table(file_name):
         n_guests = len(df_attendees)
         attendees_id_set = set(df_attendees['registration id'])
         if n_guests > 0:
-            if min(df_attendees['registration id']) < 0:
-                counter_id_for_non_registered_attendees = min(df_attendees['registration id'])
+            min_non_registered_attendees = min(pd.to_numeric(df_attendees['registration id'], errors="coerce"))
+            if min_non_registered_attendees < 0:
+                counter_id_for_non_registered_attendees = int(min_non_registered_attendees)
             else:
                 counter_id_for_non_registered_attendees = 0
             counter_id_for_registered_attendees = n_guests - abs(counter_id_for_non_registered_attendees)
@@ -56,13 +57,13 @@ def registered_window_answer(row, reservation_number, attendees_id_set, font, wa
     :param button_font: the button font.
     :return: the answer (choice) chosen by the user.
     """
-    name = row['name'].iloc[0]
-    job_title = row['job title'].iloc[0]
-    company = row['company'].iloc[0]
+    name = row['First Name'].iloc[0] + ' ' + row['Last Name'].iloc[0]
+    job_title = row['Job Title'].iloc[0] if not pd.isnull(row['Job Title'].iloc[0]) else ''
+    company = row['Company'].iloc[0] if not pd.isnull(row['Company'].iloc[0]) else ''
     msg = name + '\n' + job_title + '\n' + company
 
     # Showing the registered guest window, for a guest who hasn't signed in yet
-    if int(reservation_number) not in attendees_id_set:
+    if reservation_number not in attendees_id_set:
         answer = window.registered_guest(reservation_number,
                                          msg,
                                          font,
@@ -155,7 +156,7 @@ def main():
                 continue
             else:
                 # n_names = len(df[df['name'] == name])
-                n_names = len(df[df['name'].str.contains(name)])
+                n_names = len(df[df['First Name'].str.contains(name)])
 
                 # No found
                 if n_names == 0:
@@ -165,15 +166,15 @@ def main():
                 # found more than one
                 if n_names > 1:
                     sg.popup('There are ' + str(n_names) + ' ' + name + ' in database!')
-                # reservation_numbers = df[df['name'] == name]['id'].to_list()
-                reservation_numbers = df[df['name'].str.contains(name)]['id'].to_list()
+                # reservation_numbers = df[df['name'] == name]['Barcode #'].to_list()
+                reservation_numbers = df[df['First Name'].str.contains(name)]['Barcode #'].to_list()
 
                 # Showing a window for each guest found
                 for i, res_number in enumerate(reservation_numbers):
-                    row = df[df['id'] == res_number]
-                    name = row['name'].iloc[0]
-                    job_title = row['job title'].iloc[0]
-                    company = row['company'].iloc[0]
+                    row = df[df['Barcode #'] == res_number]
+                    name = row['First Name'].iloc[0] + ' ' + row['Last Name'].iloc[0]
+                    job_title = row['Job Title'].iloc[0] if not pd.isnull(row['Job Title'].iloc[0]) else ''
+                    company = row['Company'].iloc[0] if not pd.isnull(row['Company'].iloc[0]) else ''
                     msg = name + '\n' + job_title + '\n' + company
 
                     # Showing the registered guest window, for a guest who hasn't signed in yet
@@ -216,13 +217,9 @@ def main():
         # In case of reservation number input
         if event == 'OK':
             if reservation_number != '':
-                if not reservation_number.isnumeric():
-                    sg.popup('Type only numbers!')
-                    continue
-
                 # In case of reservation number input
-                if int(reservation_number) in registered_id_set:
-                    row = df[df['id'] == int(reservation_number)]
+                if reservation_number in registered_id_set:
+                    row = df[df['Barcode #'] == reservation_number]
 
                     answer, name, job_title, company = registered_window_answer(row, reservation_number,
                                                                                 attendees_id_set,
@@ -258,8 +255,8 @@ def main():
             # The decoded QR code is the reservation number
             reservation_number = qrcode_info
 
-            if int(reservation_number) in registered_id_set:
-                row = df[df['id'] == int(reservation_number)]
+            if reservation_number in registered_id_set:
+                row = df[df['Barcode #'] == reservation_number]
 
                 answer, name, job_title, company = registered_window_answer(row, reservation_number, attendees_id_set,
                                                                             font, warning_font, button_font)
@@ -294,7 +291,7 @@ def main():
         # Info, for guests who just signed in, that will be written in the attendees file
         data = [datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 name, job_title, company,
-                registered, int(registration_id)]
+                registered, registration_id]
 
         # Printing info on console
         print('Name:', name)
@@ -303,7 +300,7 @@ def main():
         print('reservation number:', registration_id)
 
         # Update the attendees id set: add the new registration id to the set of already signed guests
-        attendees_id_set.add(int(registration_id))
+        attendees_id_set.add(registration_id)
 
         # Append the new row (info) to the attendees file
         with open(file_name + 'attendees.csv', 'a', newline='', encoding='iso-8859-8') as f:
